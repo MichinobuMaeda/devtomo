@@ -10,6 +10,14 @@
             {{ $t('password') }}
           </q-item-section>
         </q-item>
+        <q-item clickable @click="updateApp">
+          <q-item-section avatar>
+            <q-icon name="system_update_alt" />
+          </q-item-section>
+          <q-item-section>
+            {{ $t('updateApp') }}
+          </q-item-section>
+        </q-item>
       </q-list>
     </div>
   </q-page>
@@ -17,6 +25,38 @@
 
 <script>
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  methods: {
+    async updateApp () {
+      const reloadPage = (path, cb) => {
+        const req = new XMLHttpRequest()
+        req.open('get', path)
+        req.setRequestHeader('Pragma', 'no-cache')
+        req.setRequestHeader('Expires', '-1')
+        req.setRequestHeader('Cache-Control', 'no-cache')
+        req.send()
+        req.onreadystatechange = () => {
+          if (req.readyState === 4) {
+            cb()
+          }
+        }
+      }
+      reloadPage(
+        '/service-worker.js',
+        reloadPage(
+          '/',
+          reloadPage(
+            window.location.href,
+            () => {
+              caches.keys().then(keys => {
+                keys.forEach(key => caches.delete(key))
+              })
+              setTimeout(() => document.location.reload(true), 1000)
+            }
+          )
+        )
+      )
+    }
+  }
 }
 </script>

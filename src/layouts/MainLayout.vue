@@ -12,6 +12,9 @@
             Devtomo
           </router-link>
         </q-toolbar-title>
+        <q-item>
+          Ver.1.00
+        </q-item>
       </q-toolbar>
     </q-header>
 

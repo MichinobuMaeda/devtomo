@@ -4,6 +4,7 @@ export default {
   required: '入力必須です。',
   minValue: '{val} 以上の値を入力してください。',
   password: 'パスワード生成',
+  copy: 'コピー',
   generate: '生成',
   passwordLength: '文字数',
   base: 'ベース',
@@ -11,9 +12,13 @@ export default {
   uppercases: '大文字',
   lowercases: '小文字',
   symbols: '記号',
+  useAllCharTypes: 'すべての文字種を使用する',
   avoidSimilarChars: '類似する文字を使用しない',
   similarChars: '類似する文字',
+  avoidSameChars: '同じ文字を使用しない',
+  errorWrongSettings: 'エラー：設定を見直してください。',
   std64set: '標準 64文字セット',
   lgr88set: '拡張 88文字セット',
-  all94set: '全可読 94文字セット'
+  all94set: '全可読 94文字セット',
+  updateApp: 'アプリの更新を確認する'
 }

@@ -5,19 +5,30 @@
         <q-icon name="vpn_key" /> {{ $t('password') }}
       </div>
       <q-form ref="password">
-        <div class="row">
-          <div class="col col-9 q-pr-sm">
-            <q-input
-              type="text"
-              v-model="result"
-            />
-          </div>
-          <div class="col col-3 q-pr-sm">
-            <q-btn
-              color="primary" no-caps
-              :label="$t('generate')"
-            />
-          </div>
+        <div>
+          <q-input
+            class="monospace"
+            type="text"
+            v-model="result"
+          >
+            <template v-slot:append>
+              <q-btn
+                color="secondary" no-caps
+                :label="$t('copy')"
+                @click="copy"
+                :disable="!result"
+              />
+              <q-btn
+                color="primary" no-caps
+                :label="$t('generate')"
+                @click="generate"
+                :disable="Number(length) < 4"
+              />
+            </template>
+          </q-input>
+        </div>
+        <div v-if="!result" class="text-negative">
+          {{ $t('errorWrongSettings') }}
         </div>
         <div class="row">
           <div class="col col-4 q-pr-sm">
@@ -29,6 +40,7 @@
                 v => !!v || $t('required'),
                 v => minLength <= v || $t('minValue', { val: minLength })
               ]"
+              @input="generate"
             />
           </div>
           <div class="col col-8">
@@ -38,6 +50,7 @@
               :label="$t('base')"
               emit-value
               map-options
+              @input="generate"
             />
           </div>
         </div>
@@ -45,30 +58,50 @@
           <q-checkbox
             :label="$t('numbers')"
             v-model="useNum"
+            @input="generate"
           />
           <q-checkbox
             :label="$t('uppercases')"
             v-model="useUpr"
+            @input="generate"
           />
           <q-checkbox
             :label="$t('lowercases')"
             v-model="useLwr"
+            @input="generate"
           />
           <q-checkbox
             :label="$t('symbols')"
             v-model="useSym"
+            @input="generate"
           />
         </div>
         <div>
           <q-checkbox
             :label="$t('avoidSimilarChars')"
             v-model="avoidSimilarChars"
+            @input="generate"
           />
           <q-input
             class="monospace"
             type="text"
             :label="$t('similarChars')"
             v-model="similarChars"
+            @input="generate"
+          />
+        </div>
+        <div>
+          <q-checkbox
+            :label="$t('useAllCharTypes')"
+            v-model="useAll"
+            @input="generate"
+          />
+        </div>
+        <div>
+          <q-checkbox
+            :label="$t('avoidSameChars')"
+            v-model="avoidSameChars"
+            @input="generate"
           />
         </div>
         <div>
@@ -95,6 +128,8 @@
 </style>
 
 <script>
+import { copyToClipboard } from 'quasar'
+
 export default {
   name: 'PageIndex',
   data () {
@@ -106,8 +141,11 @@ export default {
       useUpr: true,
       useLwr: true,
       useSym: true,
+      useAll: true,
       avoidSimilarChars: true,
+      avoidSameChars: true,
       similarChars: '',
+      maxRepeat: 10000,
       minLength: 4,
       bases: [
         {
@@ -142,8 +180,38 @@ export default {
       this.useUpr = true
       this.useLwr = true
       this.useSym = true
+      this.useAll = true
       this.avoidSimilarChars = false
+      this.avoidSameChars = true
       this.similarChars = 'Il10O8B3Egqvu!|[]{}'
+      this.generate()
+    },
+    generate () {
+      this.result = ''
+      const length = Number(this.length)
+      const chars = this.useChars.filter(item => item.use).map(item => item.c)
+      if ((length >= 4) && chars) {
+        for (var i = 0; i < this.maxRepeat; ++i) {
+          const val = Array.from(Array(length).keys()).map(m => {
+            const n = Math.floor(Math.random() * chars.length)
+            return chars.slice(n, n + 1)
+          }).join('')
+          if (this.useAll) {
+            if (this.useNum && !(/[0-9]/.test(val))) { continue }
+            if (this.useUpr && !(/[A-Z]/.test(val))) { continue }
+            if (this.useLwr && !(/[a-z]/.test(val))) { continue }
+            if (this.useSym && !(/[^0-9A-Za-z]/.test(val))) { continue }
+          }
+          if (this.avoidSameChars) {
+            if (val.split('').some((c, i) => val.slice(i + 1).includes(c))) { continue }
+          }
+          this.result = val
+          break
+        }
+      }
+    },
+    async copy () {
+      await copyToClipboard(this.result)
     }
   },
   computed: {
