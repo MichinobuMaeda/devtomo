@@ -6,6 +6,20 @@
       </div>
       <q-form ref="password">
         <div class="row">
+          <div class="col col-9 q-pr-sm">
+            <q-input
+              type="text"
+              v-model="result"
+            />
+          </div>
+          <div class="col col-3 q-pr-sm">
+            <q-btn
+              color="primary" no-caps
+              :label="$t('generate')"
+            />
+          </div>
+        </div>
+        <div class="row">
           <div class="col col-4 q-pr-sm">
             <q-input
               type="number"
@@ -24,7 +38,6 @@
               :label="$t('base')"
               emit-value
               map-options
-              @input="updateCharSet"
             />
           </div>
         </div>
@@ -32,36 +45,30 @@
           <q-checkbox
             :label="$t('numbers')"
             v-model="useNum"
-            @input="updateCharSet"
           />
           <q-checkbox
             :label="$t('uppercases')"
             v-model="useUpr"
-            @input="updateCharSet"
           />
           <q-checkbox
             :label="$t('lowercases')"
             v-model="useLwr"
-            @input="updateCharSet"
           />
           <q-checkbox
             :label="$t('symbols')"
             v-model="useSym"
-            @input="updateCharSet"
           />
         </div>
         <div>
           <q-checkbox
             :label="$t('avoidSimilarChars')"
             v-model="avoidSimilarChars"
-            @input="updateCharSet"
           />
           <q-input
             class="monospace"
             type="text"
             :label="$t('similarChars')"
             v-model="similarChars"
-            @input="updateCharSet"
           />
         </div>
         <div>
@@ -88,13 +95,11 @@
 </style>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters, mapMutations } = createNamespacedHelpers('password')
-
 export default {
   name: 'PageIndex',
   data () {
     return {
+      result: '',
       length: 0,
       base: null,
       useNum: true,
@@ -103,6 +108,7 @@ export default {
       useSym: true,
       avoidSimilarChars: true,
       similarChars: '',
+      minLength: 4,
       bases: [
         {
           label: this.$t('std64set'),
@@ -116,35 +122,42 @@ export default {
           label: this.$t('all94set'),
           value: 'all94set'
         }
-      ]
+      ],
+      baseChars: {
+        std64set: '!#%+23456789:=?@ABCDEFGHJKLMNPRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
+        lgr88set: '!"#$%&\'()*+,-./23456789:;<=>?@ABCDEFGHJKLMNOPRSTUVWXYZ[\\]^_abcdefghijkmnopqrstuvwxyz{|}~',
+        all94set: '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
+      }
     }
   },
   mounted () {
     this.reset()
-    this.updateCharSet()
   },
   methods: {
     reset () {
-      this.initialize()
-      Object.keys(this.params).forEach(key => {
-        this[key] = this.params[key]
-      })
-      this.updateCharSet()
-    },
-    updateCharSet () {
-      this.update(Object.keys(this.params).reduce((ret, cur) => ({ ...ret, [cur]: this[cur] }), {}))
-    },
-    ...mapMutations([
-      'initialize',
-      'update'
-    ])
+      this.result = ''
+      this.length = 8
+      this.base = 'std64set'
+      this.useNum = true
+      this.useUpr = true
+      this.useLwr = true
+      this.useSym = true
+      this.avoidSimilarChars = false
+      this.similarChars = 'Il10O8B3Egqvu!|[]{}'
+    }
   },
   computed: {
-    ...mapGetters([
-      'minLength',
-      'params',
-      'useChars'
-    ])
+    useChars () {
+      return this.baseChars.all94set.split('').map(c => ({
+        use: (this.baseChars[this.base] || '').includes(c) &&
+          (this.useNum || /[^0-9]/.test(c)) &&
+          (this.useUpr || /[^A-Z]/.test(c)) &&
+          (this.useLwr || /[^a-z]/.test(c)) &&
+          (this.useSym || /[0-9A-Za-z]/.test(c)) &&
+          (!this.avoidSimilarChars || !this.similarChars.includes(c)),
+        c
+      }))
+    }
   }
 }
 </script>

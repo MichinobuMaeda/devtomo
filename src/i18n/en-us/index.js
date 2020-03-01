@@ -4,6 +4,7 @@ export default {
   required: 'Required.',
   minValue: 'Please enter {val} or larger.',
   password: 'Random password',
+  generate: 'Generate',
   passwordLength: 'Length',
   base: 'Base',
   numbers: 'Numbers',

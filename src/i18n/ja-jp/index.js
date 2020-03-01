@@ -4,6 +4,7 @@ export default {
   required: '入力必須です。',
   minValue: '{val} 以上の値を入力してください。',
   password: 'パスワード生成',
+  generate: '生成',
   passwordLength: '文字数',
   base: 'ベース',
   numbers: '数字',
