@@ -10,6 +10,7 @@
             class="monospace"
             type="text"
             v-model="result"
+            readonly
           >
             <template v-slot:append>
               <q-btn
