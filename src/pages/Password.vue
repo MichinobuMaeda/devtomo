@@ -1,13 +1,13 @@
 <template>
   <q-page class="row justify-center">
     <div class="col col-xs-12 col-sm-9 col-md-8 col-lg-6 col-xl-4 q-pa-sm">
-      <div class="text-h5">
-        <q-icon name="vpn_key" /> {{ $t('password') }}
+      <div class="text-h5 text-blue-grey-7">
+        <q-icon name="security" /> {{ $t('password') }}
       </div>
       <q-form ref="password">
         <div>
           <q-input
-            class="monospace"
+            class="monospace text-h6"
             type="text"
             v-model="result"
             readonly
@@ -113,7 +113,7 @@
           />
         </div>
       </q-form>
-      <div style="line-height: 2em">
+      <div style="line-height: 2em" class="bg-grey-5 q-pa-sm">
         <span v-for="item in useChars" v-bind:key="item.c">
           <span :class="(item.use ? 'bg-white' : 'bg-grey-7 text-white') + ' monospace q-pa-xs'">{{ item.c }}</span>&nbsp;
         </span>

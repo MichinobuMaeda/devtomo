@@ -4,7 +4,7 @@
       <q-list>
         <q-item clickable :to="{  name: 'password' }">
           <q-item-section avatar>
-            <q-icon name="vpn_key" />
+            <q-icon name="security" />
           </q-item-section>
           <q-item-section>
             {{ $t('password') }}
@@ -56,7 +56,6 @@ export default {
           )
         )
       )
-      window.location.reload(true)
     }
   }
 }
