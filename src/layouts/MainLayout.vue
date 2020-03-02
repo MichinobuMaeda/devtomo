@@ -13,7 +13,7 @@
           </router-link>
         </q-toolbar-title>
         <q-item>
-          Ver.1.01
+          Ver.1.02
         </q-item>
       </q-toolbar>
     </q-header>
