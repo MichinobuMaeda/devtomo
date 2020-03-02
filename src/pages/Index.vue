@@ -43,18 +43,12 @@ export default {
       }
       reloadPage(
         '/service-worker.js',
-        reloadPage(
-          '/',
-          reloadPage(
-            window.location.href,
-            () => {
-              caches.keys().then(keys => {
-                keys.forEach(key => caches.delete(key))
-              })
-              setTimeout(() => document.location.reload(true), 1000)
-            }
-          )
-        )
+        () => {
+          caches.keys().then(keys => {
+            keys.forEach(key => caches.delete(key))
+          })
+          setTimeout(() => document.location.reload(true), 500)
+        }
       )
     }
   }

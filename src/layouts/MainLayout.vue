@@ -20,9 +20,8 @@
     </q-page-container>
 
     <q-footer elevated class="bg-blue-grey q-pa-sm">
-      Devtomo
-      <span class="text-orange-3 q-mr-xs">Ver.1.03</span>
-      Copyright &copy; 2020 Michinobu Maeda
+      <span class="text-orange-3 q-mr-xs">Ver.1.04</span>
+      &copy; 2020 Michinobu Maeda
     </q-footer>
   </q-layout>
 </template>
