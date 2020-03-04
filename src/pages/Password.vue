@@ -153,7 +153,10 @@ export default {
     }
   },
   mounted () {
-    this.resetForm()
+    this.p = { ...this.params }
+    if (!this.result) {
+      this.generate(this.activeChars)
+    }
   },
   methods: {
     ...mapMutations([
