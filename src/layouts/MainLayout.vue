@@ -20,7 +20,7 @@
     </q-page-container>
 
     <q-footer elevated class="bg-blue-grey q-pa-xs">
-      <span class="text-orange-3 q-mr-xs">Ver.1.10</span>
+      <span class="text-orange-2 q-mr-xs">Ver.1.11</span>
       &copy; 2020 Michinobu Maeda
     </q-footer>
   </q-layout>

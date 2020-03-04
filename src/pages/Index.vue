@@ -37,7 +37,7 @@ export default {
   methods: {
     async updateApp () {
       const req = new XMLHttpRequest()
-      req.open('get', 'service-worker.js')
+      req.open('get', location.href.replace(/#\//, 'service-worker.js'))
       req.setRequestHeader('Pragma', 'no-cache')
       req.setRequestHeader('Expires', '-1')
       req.setRequestHeader('Cache-Control', 'no-cache')
