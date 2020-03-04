@@ -22,8 +22,8 @@
               <q-btn
                 color="primary" no-caps
                 :label="$t('generate')"
-                @click="generate"
-                :disable="Number(length) < 4"
+                @click="generatePassword"
+                :disable="Number(p.length) < 4"
               />
             </template>
           </q-input>
@@ -36,85 +36,87 @@
             <q-input
               type="number"
               :label="$t('passwordLength')"
-              v-model="length"
+              v-model="p.length"
               :rules="[
                 v => !!v || $t('required'),
                 v => minLength <= v || $t('minValue', { val: minLength })
               ]"
-              @input="generate"
+              @input="generatePassword"
             />
           </div>
           <div class="col col-8">
             <q-select
-              v-model="base"
+              v-model="p.base"
               :options="bases"
               :label="$t('base')"
               emit-value
               map-options
-              @input="generate"
+              @input="generatePassword"
+            />
+          </div>
+        </div>
+        <div v-if="p.base === 'manualConf'">
+          <div>
+            <q-checkbox
+              :label="$t('numbers')"
+              v-model="p.useNum"
+              @input="generatePassword"
+            />
+            <q-checkbox
+              :label="$t('uppercases')"
+              v-model="p.useUpr"
+              @input="generatePassword"
+            />
+            <q-checkbox
+              :label="$t('lowercases')"
+              v-model="p.useLwr"
+              @input="generatePassword"
+            />
+            <q-checkbox
+              :label="$t('symbols')"
+              v-model="p.useSym"
+              @input="generatePassword"
+            />
+          </div>
+          <div>
+            <q-checkbox
+              :label="$t('avoidSimilarChars')"
+              v-model="p.avoidSimilarChars"
+              @input="generatePassword"
+            />
+            <q-input
+              class="monospace"
+              type="text"
+              :label="$t('similarChars')"
+              v-model="p.similarChars"
+              @input="generatePassword"
             />
           </div>
         </div>
         <div>
           <q-checkbox
-            :label="$t('numbers')"
-            v-model="useNum"
-            @input="generate"
-          />
-          <q-checkbox
-            :label="$t('uppercases')"
-            v-model="useUpr"
-            @input="generate"
-          />
-          <q-checkbox
-            :label="$t('lowercases')"
-            v-model="useLwr"
-            @input="generate"
-          />
-          <q-checkbox
-            :label="$t('symbols')"
-            v-model="useSym"
-            @input="generate"
-          />
-        </div>
-        <div>
-          <q-checkbox
-            :label="$t('avoidSimilarChars')"
-            v-model="avoidSimilarChars"
-            @input="generate"
-          />
-          <q-input
-            class="monospace"
-            type="text"
-            :label="$t('similarChars')"
-            v-model="similarChars"
-            @input="generate"
-          />
-        </div>
-        <div>
-          <q-checkbox
             :label="$t('useAllCharTypes')"
-            v-model="useAll"
-            @input="generate"
+            v-model="p.useAll"
+            @input="generatePassword"
           />
         </div>
         <div>
           <q-checkbox
             :label="$t('avoidSameChars')"
-            v-model="avoidSameChars"
-            @input="generate"
+            v-model="p.avoidSameChars"
+            @input="generatePassword"
           />
         </div>
         <div>
           <q-btn
             class="q-ma-md" color="negative" no-caps
             :label="$t('reset')"
-            @click="reset"
+            @click="resetForm"
           />
         </div>
       </q-form>
       <div style="line-height: 2em" class="bg-grey-5 q-pa-sm">
-        <span v-for="item in useChars" v-bind:key="item.c">
+        <span v-for="item in activeChars" v-bind:key="item.c">
           <span :class="(item.use ? 'bg-white' : 'bg-grey-7 text-white') + ' monospace q-pa-xs'">{{ item.c }}</span>&nbsp;
         </span>
       </div>
@@ -122,31 +124,17 @@
   </q-page>
 </template>
 
-<style scoped>
-.monospace {
-  font-family: Lucida Console, Courier, monospace;
-}
-</style>
-
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import { copyToClipboard } from 'quasar'
+
+const { mapState, mapGetters, mapMutations } = createNamespacedHelpers('password')
 
 export default {
   name: 'PageIndex',
   data () {
     return {
-      result: '',
-      length: 0,
-      base: null,
-      useNum: true,
-      useUpr: true,
-      useLwr: true,
-      useSym: true,
-      useAll: true,
-      avoidSimilarChars: true,
-      avoidSameChars: true,
-      similarChars: '',
-      maxRepeat: 10000,
+      p: {},
       minLength: 4,
       bases: [
         {
@@ -158,75 +146,42 @@ export default {
           value: 'lgr88set'
         },
         {
-          label: this.$t('all94set'),
-          value: 'all94set'
+          label: this.$t('manualConf'),
+          value: 'manualConf'
         }
-      ],
-      baseChars: {
-        std64set: '!#%+23456789:=?@ABCDEFGHJKLMNPRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
-        lgr88set: '!"#$%&\'()*+,-./23456789:;<=>?@ABCDEFGHJKLMNOPRSTUVWXYZ[\\]^_abcdefghijkmnopqrstuvwxyz{|}~',
-        all94set: '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
-      }
+      ]
     }
   },
   mounted () {
-    this.reset()
+    this.resetForm()
   },
   methods: {
-    reset () {
-      this.result = ''
-      this.length = 8
-      this.base = 'std64set'
-      this.useNum = true
-      this.useUpr = true
-      this.useLwr = true
-      this.useSym = true
-      this.useAll = true
-      this.avoidSimilarChars = false
-      this.avoidSameChars = true
-      this.similarChars = 'Il10O8B3Egqvu!|[]{}'
-      this.generate()
+    ...mapMutations([
+      'reset',
+      'saveParam',
+      'generate'
+    ]),
+    resetForm () {
+      this.reset()
+      this.p = { ...this.params }
+      this.generate(this.activeChars)
     },
-    generate () {
-      this.result = ''
-      const length = Number(this.length)
-      const chars = this.useChars.filter(item => item.use).map(item => item.c)
-      if ((length >= 4) && chars) {
-        for (var i = 0; i < this.maxRepeat; ++i) {
-          const val = Array.from(Array(length).keys()).map(m => {
-            const n = Math.floor(Math.random() * chars.length)
-            return chars.slice(n, n + 1)
-          }).join('')
-          if (this.useAll) {
-            if (this.useNum && !(/[0-9]/.test(val))) { continue }
-            if (this.useUpr && !(/[A-Z]/.test(val))) { continue }
-            if (this.useLwr && !(/[a-z]/.test(val))) { continue }
-            if (this.useSym && !(/[^0-9A-Za-z]/.test(val))) { continue }
-          }
-          if (this.avoidSameChars) {
-            if (val.split('').some((c, i) => val.slice(i + 1).includes(c))) { continue }
-          }
-          this.result = val
-          break
-        }
-      }
+    generatePassword () {
+      this.saveParam(this.p)
+      this.generate(this.activeChars)
     },
     async copy () {
       await copyToClipboard(this.result)
     }
   },
   computed: {
-    useChars () {
-      return this.baseChars.all94set.split('').map(c => ({
-        use: (this.baseChars[this.base] || '').includes(c) &&
-          (this.useNum || /[^0-9]/.test(c)) &&
-          (this.useUpr || /[^A-Z]/.test(c)) &&
-          (this.useLwr || /[^a-z]/.test(c)) &&
-          (this.useSym || /[0-9A-Za-z]/.test(c)) &&
-          (!this.avoidSimilarChars || !this.similarChars.includes(c)),
-        c
-      }))
-    }
+    ...mapState([
+      'result',
+      'params'
+    ]),
+    ...mapGetters([
+      'activeChars'
+    ])
   }
 }
 </script>

@@ -19,6 +19,6 @@ export default {
   errorWrongSettings: 'エラー：設定を見直してください。',
   std64set: '標準 64文字セット',
   lgr88set: '拡張 88文字セット',
-  all94set: '全可読 94文字セット',
+  manualConf: '手動設定',
   updateApp: 'アプリの更新を確認する'
 }
