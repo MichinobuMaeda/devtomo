@@ -13,6 +13,11 @@ const routes = [
         path: '/password',
         name: 'password',
         component: () => import('pages/Password.vue')
+      },
+      {
+        path: '/base',
+        name: 'base',
+        component: () => import('pages/BaseConverter.vue')
       }
     ]
   }

@@ -1,0 +1,2 @@
+export const fullName = state => name => (name.slice(0, 1) === 'c' ? '8' : (name.slice(0, 1) === 'w' ? '16' : (name.slice(0, 1) === 'd' ? '32' : '64'))) + '-bit ' + (name.slice(1, 2) === 's' ? ' Signed' : ' Unsigned') + (name.slice(2, 3) === 'h' ? ' Hex' : ' Bin')
+export const maxLenght = state => name => (name.slice(0, 1) === 'c' ? 2 : (name.slice(0, 1) === 'w' ? 4 : (name.slice(0, 1) === 'd' ? 8 : 16))) * (name.slice(2, 3) === 'h' ? 1 : 4)

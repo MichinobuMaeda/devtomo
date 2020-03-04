@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import password from './password'
+import base from './base'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    password
+    password,
+    base
   },
 
   // enable strict mode (adds overhead!)

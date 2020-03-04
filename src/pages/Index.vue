@@ -10,6 +10,14 @@
             {{ $t('password') }}
           </q-item-section>
         </q-item>
+        <q-item clickable :to="{  name: 'base' }">
+          <q-item-section avatar>
+            <q-icon name="memory" />
+          </q-item-section>
+          <q-item-section>
+            {{ $t('baseConverter') }}
+          </q-item-section>
+        </q-item>
         <q-item clickable @click="updateApp">
           <q-item-section avatar>
             <q-icon name="system_update_alt" />
