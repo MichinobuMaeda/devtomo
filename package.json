@@ -8,7 +8,7 @@
   "author": "Michinobu Maeda <michinobumaeda@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "quasar build -m pwa",
+    "build": "quasar build -m pwa && rm -rf docs/* && cp -r dist/pwa/* docs/",
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev -m pwa"
