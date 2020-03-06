@@ -20,8 +20,13 @@
     </q-page-container>
 
     <q-footer elevated class="bg-blue-grey q-pa-xs">
-      <span class="text-orange-2 q-mr-xs">Ver.1.1.3</span>
       &copy; 2020 Michinobu Maeda
+      <a href="https://github.com/MichinobuMaeda/devtomo" target="_blank" class="q-ma-xs">
+        <q-avatar size="sm">
+          <img src="statics/GitHub-Mark-Light-32px.png" alt="GitHub" />
+        </q-avatar>
+      </a>
+      <span>Ver.1.1.3</span>
     </q-footer>
   </q-layout>
 </template>

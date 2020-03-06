@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "adbc4df25f568db8bccd",
-    "url": "css/2.ae26952e.css"
+    "revision": "61976f2830e8d8324db4",
+    "url": "css/2.34cd0f7f.css"
   },
   {
-    "revision": "d8a60a791d5e9a6ce3c9",
+    "revision": "07df053fbc3057032037",
     "url": "css/app.5cf01f71.css"
   },
   {
@@ -40,12 +40,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.0509ab09.woff2"
   },
   {
-    "revision": "901880379fe11206533d890bb617a726",
+    "revision": "9971399f55179eb5076bc68ba536079d",
     "url": "index.html"
   },
   {
-    "revision": "adbc4df25f568db8bccd",
-    "url": "js/2.adbc4df2.js"
+    "revision": "61976f2830e8d8324db4",
+    "url": "js/2.61976f28.js"
   },
   {
     "revision": "e04cabb3b1e7b12cea08",
@@ -64,8 +64,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "js/6.d3f4e530.js"
   },
   {
-    "revision": "d8a60a791d5e9a6ce3c9",
-    "url": "js/app.4ac1f4af.js"
+    "revision": "07df053fbc3057032037",
+    "url": "js/app.a8215f13.js"
   },
   {
     "revision": "3de17aa68dfce0ba9720",
@@ -74,6 +74,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "ae969733f27fc43162482580a7733a06",
     "url": "manifest.json"
+  },
+  {
+    "revision": "d56df49a807a9fd06eb1667a84d3810e",
+    "url": "statics/GitHub-Mark-Light-32px.png"
   },
   {
     "revision": "e44a6980ab9504b8b12f80946ac94d9f",
