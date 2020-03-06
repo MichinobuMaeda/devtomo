@@ -36,20 +36,21 @@ export default {
   name: 'PageIndex',
   methods: {
     async updateApp () {
-      const req = new XMLHttpRequest()
-      req.open('get', location.href.replace(/#\//, 'service-worker.js'))
-      req.setRequestHeader('Pragma', 'no-cache')
-      req.setRequestHeader('Expires', '-1')
-      req.setRequestHeader('Cache-Control', 'no-cache')
-      req.send()
-      req.onreadystatechange = () => {
-        if (req.readyState === 4) {
-          caches.keys().then(keys => {
-            keys.forEach(key => caches.delete(key))
-          })
-          setTimeout(() => document.location.reload(true), 500)
-        }
-      }
+      document.location.reload(true)
+      // const req = new XMLHttpRequest()
+      // req.open('get', location.href.replace(/#\//, 'service-worker.js'))
+      // req.setRequestHeader('Pragma', 'no-cache')
+      // req.setRequestHeader('Expires', '-1')
+      // req.setRequestHeader('Cache-Control', 'no-cache')
+      // req.send()
+      // req.onreadystatechange = () => {
+      //   if (req.readyState === 4) {
+      //     caches.keys().then(keys => {
+      //       keys.forEach(key => caches.delete(key))
+      //     })
+      //     setTimeout(() => document.location.reload(true), 500)
+      //   }
+      // }
     }
   }
 }

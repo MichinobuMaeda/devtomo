@@ -98,11 +98,14 @@ module.exports = function (ctx) {
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
-      workboxOptions: {}, // only for GenerateSW
+      workboxOptions: {
+        skipWaiting: true,
+        clientsClaim: true
+      }, // only for GenerateSW
       manifest: {
-        name: 'devtomo',
-        short_name: 'devtomo',
-        description: 'devtomo',
+        name: 'Devtomo',
+        short_name: 'Devtomo',
+        description: 'Dev. tools on desktop',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

@@ -1,12 +1,12 @@
 {
   "name": "devtomo",
-  "version": "0.0.1",
-  "description": "devtomo",
-  "productName": "devtomo",
+  "version": "1.0.0",
+  "description": "Dev. tools on desktop",
+  "productName": "Devtomo",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "Michinobu Maeda <michinobumaeda@gmail.com>",
-  "private": true,
+  "license": "MIT",
   "scripts": {
     "build": "quasar build -m pwa",
     "lint": "eslint --ext .js,.vue src",
