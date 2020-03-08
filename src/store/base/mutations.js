@@ -8,7 +8,7 @@ const parser = {
 export const setValue = (state, { name, str }) => {
   const val = parser[name.slice(1, 3)](str)
   const ng = 'Overflow'
-  state.values.dec = val
+  state.values.dec = val.toString(10)
   state.values.cuh = val < 0 || parseInt('ff', 16) < val
     ? ng : ('00' + val.toString(16)).slice(-2)
   state.values.cub = val < 0 || parseInt('ff', 16) < val
