@@ -18,6 +18,14 @@
             {{ $t('baseConverter') }}
           </q-item-section>
         </q-item>
+        <q-item clickable :to="{  name: 'color' }">
+          <q-item-section avatar>
+            <q-icon name="color_lens" />
+          </q-item-section>
+          <q-item-section>
+            {{ $t('colorPicker') }}
+          </q-item-section>
+        </q-item>
         <q-item clickable @click="updateApp">
           <q-item-section avatar>
             <q-icon name="system_update_alt" />

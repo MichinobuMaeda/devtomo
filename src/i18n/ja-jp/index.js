@@ -6,6 +6,7 @@ export default {
   charTypes: '{chars} を入力してください。',
   password: 'パスワード生成',
   baseConverter: '2進・10進・16進変換',
+  colorPicker: 'Color picker',
   copy: 'コピー',
   generate: '生成',
   passwordLength: '文字数',
@@ -22,5 +23,6 @@ export default {
   std64set: '標準 64文字セット',
   lgr88set: '拡張 88文字セット',
   manualConf: '手動設定',
+  brightness: '明度',
   updateApp: 'アプリの更新を確認する'
 }

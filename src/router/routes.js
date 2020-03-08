@@ -18,6 +18,11 @@ const routes = [
         path: '/base',
         name: 'base',
         component: () => import('pages/BaseConverter.vue')
+      },
+      {
+        path: '/color',
+        name: 'color',
+        component: () => import('pages/ColorPicker.vue')
       }
     ]
   }

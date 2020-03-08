@@ -6,6 +6,7 @@ export default {
   charTypes: 'Please enter {chars}.',
   password: 'Random password',
   baseConverter: 'base 2, 10, 16 Converter',
+  colorPicker: 'Color picker',
   copy: 'Copy',
   generate: 'Generate',
   passwordLength: 'Length',
@@ -22,5 +23,6 @@ export default {
   std64set: 'Standard 64 chars set',
   lgr88set: 'Larger 88 chars set',
   all94set: 'All readable 94 chars set',
+  brightness: 'Brightness',
   updateApp: 'Check for app updates'
 }
