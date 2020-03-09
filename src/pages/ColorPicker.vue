@@ -121,8 +121,8 @@ export default {
     this.r = this.color.r
     this.g = this.color.g
     this.b = this.color.b
-    this.drawFace()
-    this.applyRgb()
+    this.$nextTick(() => this.drawFace())
+    this.$nextTick(() => this.applyRgb())
   },
   methods: {
     setHex (hex) {
@@ -162,25 +162,30 @@ export default {
       this.faceY = 765 - (this.r + this.g + this.b)
       this.sliceX = ox - this.g / 2 * sqrt3 + this.b / 2 * sqrt3
       this.sliceY = oy - this.r + this.g / 2 + this.b / 2
-      this.drawFace()
       this.drawBrightnessPointer()
-      this.drawSlice()
-      this.drawSelectedColor()
+      this.$nextTick(() => {
+        this.drawSlice()
+        this.drawSelectedColor()
+      })
     },
     brightnessDown (count) {
       if (this.faceY < 765) {
         this.faceY = Math.min(this.faceY + count, 765)
         this.drawBrightnessPointer()
-        this.drawSlice()
-        this.updateRdb()
+        this.$nextTick(() => {
+          this.drawSlice()
+          this.updateRdb()
+        })
       }
     },
     brightnessUp (count) {
       if (this.faceY > 0) {
         this.faceY = Math.max(this.faceY - count, 0)
         this.drawBrightnessPointer()
-        this.drawSlice()
-        this.updateRdb()
+        this.$nextTick(() => {
+          this.drawSlice()
+          this.updateRdb()
+        })
       }
     },
     sliceMousedown (event) {
@@ -297,8 +302,10 @@ export default {
         256 * 1.5 + (765 - this.faceY) * 1.5
       )
       this.drawBrightnessPointer()
-      // this.drawHuePointer()
-      this.drawSlice()
+      this.$nextTick(() => {
+        this.drawSlice()
+        this.drawSelectedColor()
+      })
     },
     drawBrightnessPointer () {
       const face = document.getElementById('face')
