@@ -15,32 +15,25 @@
             :rules="[
               v => !!v || $t('required')
             ]"
-          >
-            <template v-slot:append>
-              <q-btn flat icon="input" @click="onInput(name)" />
-            </template>
-          </q-input>
+            @change="onInput(name)"
+          />
           <q-input
             v-else
             :class="'monospace ' + (name.slice(2, 3) === 'h' ? 'text-h6' : 'text-body1')"
-            :filled="v[name] === 'Overflow'"
             :label="fullName(name)"
             type="text"
             v-model="v[name]"
             :maxlength="maxLenght(name)"
             :rules="[
-              v => !!v || $t('required'),
+              v => !!v || $t('NaN'),
               v => (
                 name.slice(2, 3) === 'h'
-                  ? (/^([0-9a-f]+|Overflow)$/.test(v) || $t('charTypes', { chars: '0 - 9, a - f' }))
-                  : (/^([01]+|Overflow)$/.test(v) || $t('charTypes', { chars: '0 or 1' }))
+                  ? (/^([0-9a-f]+)$/.test(v) || $t('charTypes', { chars: '0 - 9, a - f' }))
+                  : (/^([01]+)$/.test(v) || $t('charTypes', { chars: '0 or 1' }))
               )
             ]"
-          >
-            <template v-slot:append>
-              <q-btn flat icon="input" @click="onInput(name)" />
-            </template>
-          </q-input>
+            @change="onInput(name)"
+          />
         </div>
       </q-form>
     </div>
