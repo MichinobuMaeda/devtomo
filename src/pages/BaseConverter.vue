@@ -40,7 +40,7 @@
               v => !!v || 'NaN',
               v => (
                 name.slice(2, 3) === 'h'
-                  ? (/^([0-9a-f]+)$/.test(v) || $t('charTypes', { chars: '0 - 9, a - f' }))
+                  ? (/^([0-9A-Fa-f]+)$/.test(v) || $t('charTypes', { chars: '0 - 9, A - F, a - f' }))
                   : (/^([01]+)$/.test(v) || $t('charTypes', { chars: '0 or 1' }))
               )
             ]"
