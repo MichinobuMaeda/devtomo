@@ -45,10 +45,10 @@
         <div class="col col-xs-12 col-sm-6">
           <canvas
             id="face"
-            @mousedown="pollyMousedown"
-            @mouseup="pollyMouseup"
-            @mouseleave="pollyMouseup"
-            @mousemove="pollyMousemove"
+            @mousedown="faceMousedown"
+            @mouseup="faceMouseup"
+            @mouseleave="faceMouseup"
+            @mousemove="faceMousemove"
           />
         </div>
       </div>
@@ -121,8 +121,8 @@ export default {
     this.r = this.color.r
     this.g = this.color.g
     this.b = this.color.b
-    this.$nextTick(() => this.drawFace())
-    this.$nextTick(() => this.applyRgb())
+    this.drawFace()
+    this.applyRgb()
   },
   methods: {
     setHex (hex) {
@@ -163,29 +163,23 @@ export default {
       this.sliceX = ox - this.g / 2 * sqrt3 + this.b / 2 * sqrt3
       this.sliceY = oy - this.r + this.g / 2 + this.b / 2
       this.drawBrightnessPointer()
-      this.$nextTick(() => {
-        this.drawSlice()
-        this.drawSelectedColor()
-      })
+      this.drawSlice()
+      this.drawSelectedColor()
     },
     brightnessDown (count) {
       if (this.faceY < 765) {
         this.faceY = Math.min(this.faceY + count, 765)
         this.drawBrightnessPointer()
-        this.$nextTick(() => {
-          this.drawSlice()
-          this.updateRdb()
-        })
+        this.drawSlice()
+        this.updateRdb()
       }
     },
     brightnessUp (count) {
       if (this.faceY > 0) {
         this.faceY = Math.max(this.faceY - count, 0)
         this.drawBrightnessPointer()
-        this.$nextTick(() => {
-          this.drawSlice()
-          this.updateRdb()
-        })
+        this.drawSlice()
+        this.updateRdb()
       }
     },
     sliceMousedown (event) {
@@ -243,15 +237,15 @@ export default {
       ctx.strokeStyle = this.faceY > 386 ? 'white' : 'black'
       ctx.stroke()
     },
-    pollyMousedown (event) {
+    faceMousedown (event) {
       this.faceSelected = true
       this.setFaceMousePosition(event)
       this.updateRdb()
     },
-    pollyMouseup () {
+    faceMouseup () {
       this.faceSelected = false
     },
-    pollyMousemove (event) {
+    faceMousemove (event) {
       if (this.faceSelected) {
         this.setFaceMousePosition(event)
         this.updateRdb()
@@ -273,16 +267,22 @@ export default {
       const ox = slice.width / 2
       const oy = slice.height / 2
       const rgb = Math.max(765 - this.faceY, 0)
-      for (var r = Math.max(0, rgb - 510); r <= Math.min(rgb, 255); ++r) {
-        const gb = rgb - r
-        for (var g = Math.max(0, gb - 255); g <= Math.min(gb, 255); ++g) {
-          const b = gb - g
-          ctx.beginPath()
-          ctx.rect(ox - g / 2 * sqrt3 + b / 2 * sqrt3, oy - r + g / 2 + b / 2, p, p)
-          ctx.fillStyle = `rgb(${r},${g},${b})`
-          ctx.fill()
+      const drawSelectedColor = this.drawSelectedColor
+      setTimeout(function () {
+        ctx.fillStyle = `rgb(${bg},${bg},${bg})`
+        ctx.fillRect(0, 0, slice.height, slice.width)
+        drawSelectedColor()
+        for (var r = Math.max(0, rgb - 510); r <= Math.min(rgb, 255); ++r) {
+          const gb = rgb - r
+          for (var g = Math.max(0, gb - 255); g <= Math.min(gb, 255); ++g) {
+            const b = gb - g
+            ctx.beginPath()
+            ctx.rect(ox - g / 2 * sqrt3 + b / 2 * sqrt3, oy - r + g / 2 + b / 2, p, p)
+            ctx.fillStyle = `rgb(${r},${g},${b})`
+            ctx.fill()
+          }
         }
-      }
+      }, 30)
     },
     setFaceMousePosition (event) {
       const rect = event.target.getBoundingClientRect()
@@ -301,11 +301,28 @@ export default {
         256 * 3 - 1,
         256 * 1.5 + (765 - this.faceY) * 1.5
       )
+      this.setHue()
       this.drawBrightnessPointer()
-      this.$nextTick(() => {
-        this.drawSlice()
-        this.drawSelectedColor()
-      })
+      this.drawSlice()
+      this.drawSelectedColor()
+    },
+    setHue () {
+      const slice = document.getElementById('slice')
+      const ox = slice.width / 2
+      const oy = slice.height / 2
+      const l = Math.max(
+        256 * 1.5 - this.faceY * 1.5,
+        0,
+        256 * 1.5 - (765 - this.faceY) * 1.5
+      )
+      const r = Math.min(
+        256 * 1.5 + this.faceY * 1.5,
+        256 * 3 - 1,
+        256 * 1.5 + (765 - this.faceY) * 1.5
+      )
+      const hue = (this.faceX - l) / (r - l)
+      this.sliceX = ox - Math.sin(hue * 2 * Math.PI) * ox
+      this.sliceY = oy - Math.sin((hue + 0.25) * 2 * Math.PI) * oy
     },
     drawBrightnessPointer () {
       const face = document.getElementById('face')
@@ -356,30 +373,32 @@ export default {
       ctx.fillRect(m, m, 256 * 3 + p, 768 + p * 2)
 
       // colors
-      const ox = m + p / 2 + 256 * 1.5
-      const oy = m + p / 2
-      const drawPoint = (x, y, r, g, b) => {
-        ctx.beginPath()
-        ctx.rect(ox + x, oy + (768 - y), p, p)
-        ctx.fillStyle = `rgb(${r},${g},${b})`
-        ctx.fill()
-      }
-      for (var y = 0; y < 256; ++y) {
-        for (var x = 0; x <= y; ++x) {
-          drawPoint(y * -1 / 2 - x * 1, y, x, y - x, 0)
-          drawPoint(y / 2 - x * 1, y, 0, x, y - x)
-          drawPoint(y * 1.5 - x * 1, y, y - x, 0, x)
-          drawPoint(128 - y / 2 + x, y + 256, x, y - x, 255)
-          drawPoint(x < y / 2 ? 384 - y / 2 + x : -384 - y / 2 + x, y + 256, 255, x, y - x)
-          drawPoint(-128 - y / 2 + x, y + 256, y - x, 255, x)
-          drawPoint(-256 - y / 2 + x, 511 - y, 255 - x, 255 + x - y, 0)
-          drawPoint(256 - y / 2 + x, 511 - y, 255 + x - y, 0, 255 - x)
-          drawPoint(y / -2 + x, 511 - y, 0, 255 - x, 255 + x - y)
-          drawPoint(y - x, 767 - y, 255 - x, 255 + x - y, 255)
-          drawPoint(x < y / 2 ? y + x : y * -2 + x, 767 - y, 255, 255 + x - y, 255 - x)
-          drawPoint(y * -1 + x, 767 - y, 255 - x, 255, 255 + x - y)
+      setTimeout(function () {
+        const ox = m + p / 2 + 256 * 1.5
+        const oy = m + p / 2
+        const drawPoint = (x, y, r, g, b) => {
+          ctx.beginPath()
+          ctx.rect(ox + x, oy + (768 - y), p, p)
+          ctx.fillStyle = `rgb(${r},${g},${b})`
+          ctx.fill()
         }
-      }
+        for (var y = 0; y < 256; ++y) {
+          for (var x = 0; x <= y; ++x) {
+            drawPoint(y * -1 / 2 - x * 1, y, x, y - x, 0)
+            drawPoint(y / 2 - x * 1, y, 0, x, y - x)
+            drawPoint(y * 1.5 - x * 1, y, y - x, 0, x)
+            drawPoint(128 - y / 2 + x, y + 256, x, y - x, 255)
+            drawPoint(x < y / 2 ? 384 - y / 2 + x : -384 - y / 2 + x, y + 256, 255, x, y - x)
+            drawPoint(-128 - y / 2 + x, y + 256, y - x, 255, x)
+            drawPoint(-256 - y / 2 + x, 511 - y, 255 - x, 255 + x - y, 0)
+            drawPoint(256 - y / 2 + x, 511 - y, 255 + x - y, 0, 255 - x)
+            drawPoint(y / -2 + x, 511 - y, 0, 255 - x, 255 + x - y)
+            drawPoint(y - x, 767 - y, 255 - x, 255 + x - y, 255)
+            drawPoint(x < y / 2 ? y + x : y * -2 + x, 767 - y, 255, 255 + x - y, 255 - x)
+            drawPoint(y * -1 + x, 767 - y, 255 - x, 255, 255 + x - y)
+          }
+        }
+      }, 30)
     },
     ...mapMutations([
       'setColor'
