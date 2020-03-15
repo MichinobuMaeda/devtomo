@@ -6,5 +6,5 @@ Devtomo
 Dev. tools on desktop runs on: https://michinobumaeda.github.io/devtomo/
 
 * Random password generator
-* Base 2, 10, 16 converter
+* Base 2, 10, 16 and Unicode converter
 * Color picker
