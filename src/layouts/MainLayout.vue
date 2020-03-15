@@ -24,7 +24,7 @@
           <img src="statics/GitHub-Mark-Light-32px.png" alt="GitHub" />
         </q-avatar>
       </a>
-      <span>Ver.1.2.0</span>
+      <span>Ver.1.2.1</span>
     </q-footer>
   </q-layout>
 </template>

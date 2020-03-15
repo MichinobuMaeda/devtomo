@@ -17,7 +17,7 @@
         <div class="col col-xs-3 col-sm-2 col-md-2 col-lg-1 col-xl-1 q-pa-sm">
           <q-input type="text" label="Hex" v-model="hex" mask="\#xxxxxx" fill-mask @change="onInputHex" />
         </div>
-        <div class="col col-xs-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 q-pa-sm">
+        <div class="col col-xs-12 col-sm-4 col-md-4 col-lg-3 col-xl-3 q-pa-sm">
           <q-input type="text" readonly label="Color name" v-model="colorName">
             <template v-slot:after>
               <q-btn color="primary" round icon="more_vert" @click="$refs.colorNames.show()" />
