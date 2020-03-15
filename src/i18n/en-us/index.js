@@ -5,7 +5,7 @@ export default {
   minValue: 'Please enter {val} or larger.',
   charTypes: 'Please enter {chars}.',
   password: 'Random password',
-  baseConverter: 'base 2, 10, 16 Converter',
+  baseConverter: 'base 2, 10, 16 and Unicode Converter',
   colorPicker: 'Color picker',
   copy: 'Copy',
   generate: 'Generate',

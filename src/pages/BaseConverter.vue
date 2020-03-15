@@ -6,17 +6,29 @@
       </div>
       <q-form ref="base">
         <div v-for="name in Object.keys(v)" v-bind:key="name">
-          <q-input
-            v-if="name === 'dec'"
-            class="monospace text-h6"
-            label="Dec"
-            type="number"
-            v-model="v[name]"
-            :rules="[
-              v => !!v || $t('required')
-            ]"
-            @change="onInput(name)"
-          />
+          <div class="row" v-if="name === 'dec'">
+            <div class="col col-8">
+              <q-input
+                class="monospace text-h6"
+                label="Dec"
+                type="number"
+                v-model="v[name]"
+                :rules="[
+                  v => !!v || $t('required')
+                ]"
+                @change="onChange(name)"
+              />
+            </div>
+            <div class="col col-4 q-pl-md">
+              <q-input
+                class="monospace text-h6"
+                label="Character"
+                type="text"
+                v-model="c"
+                @change="onChangeCharacter"
+              />
+            </div>
+          </div>
           <q-input
             v-else
             :class="'monospace ' + (name.slice(2, 3) === 'h' ? 'text-h6' : 'text-body1')"
@@ -25,14 +37,14 @@
             v-model="v[name]"
             :maxlength="maxLenght(name)"
             :rules="[
-              v => !!v || $t('NaN'),
+              v => !!v || 'NaN',
               v => (
                 name.slice(2, 3) === 'h'
                   ? (/^([0-9a-f]+)$/.test(v) || $t('charTypes', { chars: '0 - 9, a - f' }))
                   : (/^([01]+)$/.test(v) || $t('charTypes', { chars: '0 or 1' }))
               )
             ]"
-            @change="onInput(name)"
+            @change="onChange(name)"
           />
         </div>
       </q-form>
@@ -49,25 +61,33 @@ export default {
   name: 'PageBaseConverter',
   data () {
     return {
-      v: {}
+      v: {},
+      c: ''
     }
   },
   mounted () {
-    this.reset()
+    this.show()
   },
   methods: {
     ...mapMutations([
       'setValue'
     ]),
-    onInput (name) {
+    show () {
+      this.v = { ...this.values }
+      this.c = this.v.duh ? this.unicode(parseInt(this.v.duh, 16)) : ''
+    },
+    onChange (name) {
       this.setValue({
         name,
         str: this.v[name]
       })
-      this.reset()
+      this.show()
     },
-    reset () {
-      this.v = { ...this.values }
+    onChangeCharacter () {
+      if (this.c && this.c.length === 1) {
+        this.v.duh = this.c.charCodeAt(0).toString(16)
+        this.onChange('duh')
+      }
     }
   },
   computed: {
@@ -76,7 +96,8 @@ export default {
     ]),
     ...mapGetters([
       'fullName',
-      'maxLenght'
+      'maxLenght',
+      'unicode'
     ])
   }
 }

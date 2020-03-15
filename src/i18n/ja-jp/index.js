@@ -5,7 +5,7 @@ export default {
   minValue: '{val} 以上の値を入力してください。',
   charTypes: '{chars} を入力してください。',
   password: 'パスワード生成',
-  baseConverter: '2進・10進・16進変換',
+  baseConverter: '2, 10, 16進 / Unicode変換',
   colorPicker: 'Color picker',
   copy: 'コピー',
   generate: '生成',
